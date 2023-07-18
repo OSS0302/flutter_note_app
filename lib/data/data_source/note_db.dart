@@ -20,4 +20,11 @@ class NoteDb {
     return null; // 데이터 없으면 null 로 반환한다.
   }
   // 전체 노트 가져오기
+Future<List<Note>> getNotes( )async{
+    final maps = await db.query('notes'); // 아무조건이 없으면 notes 모든 데이터 를 가져오겠다.
+    return maps.map((e) => Note.fromJson(e)).toList(); //노트를 리스트형태로
+}
+
+
+
 }
