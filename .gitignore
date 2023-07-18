@@ -42,3 +42,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# freezed build 했을때 아래 파일 commit 하지 않는게 좋다 .
+.idea/
+*g.dart
+*.mocks.dart
+*.freezed.dart
