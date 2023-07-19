@@ -40,6 +40,9 @@ class NoteDb {
     await db.update(
       'note', note.toJson(), where: 'id = ?', whereArgs: [note.id],);
   }
-
-
+  // 노트 삭제 하기
+  Future<void> deleteNote(Note note) async {
+    await db.delete('note', where:'id=?', whereArgs: [note.id]
+    );
   }
+}
