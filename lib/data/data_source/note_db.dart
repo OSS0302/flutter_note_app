@@ -33,4 +33,13 @@ class NoteDb {
   Future<void> insertNote(Note note) async {
     await db.insert('note', note.toJson()); //  note 테이블  map Json 데이터를 전달
   }
-}
+
+  // 수정 기능
+  Future<void> update(Note note) async {
+    // id를  리턴  하니까 추가하안되면 0을 리턴한다.
+    await db.update(
+      'note', note.toJson(), where: 'id = ?', whereArgs: [note.id],);
+  }
+
+
+  }
