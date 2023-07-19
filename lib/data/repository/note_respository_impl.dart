@@ -7,33 +7,32 @@ class NoteRepositoryImpl implements NoteRepository{
   //생성자
   NoteRepositoryImpl(this.db);
 
+  // 결과를 받아서 사용해야되므로  await 를  해야한다.
+
   @override
-  Future<void> deleteNoteNote(Note note) {
-    // TODO: implement deleteNoteNote
-    throw UnimplementedError();
+  Future<void> deleteNoteNote(Note note) async{
+    await db.deleteNote(note);
   }
 
   @override
-  Future<List<Note>> getNoes() {
-    // TODO: implement getNoes
-    throw UnimplementedError();
+  Future<Note?> getNoteById(int id) async {
+    return await db.getNoteById(id);
+  }
+  @override
+  Future<List<Note>> getNoes() async {
+    return await db.getNotes();
   }
 
   @override
-  Future<Note> getNoteById(int id) {
-    // TODO: implement getNoteById
-    throw UnimplementedError();
+  Future<void> insertNote(Note note) async {
+   await db.insertNote(note);
   }
 
   @override
-  Future<void> insertNote(Note note) {
-    // TODO: implement insertNote
-    throw UnimplementedError();
+  Future<void> updateNote(Note note) async {
+  await db.update(note);
   }
 
-  @override
-  Future<void> updateNote(Note note) {
-    // TODO: implement updateNote
-    throw UnimplementedError();
-  }
+
 }
+
