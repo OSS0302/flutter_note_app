@@ -1,12 +1,13 @@
 import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:sqflite/sqlite_api.dart';
 
-class NoteDb {
+class NoteDbHelper {
   // 실제 데이터를 구성하는 db
   Database db; // db 를 받고
 
-  NoteDb(this.db); // 생성자 추가
+  NoteDbHelper(this.db); // 생성자 추가
 
+  // 아이디로 데이터를 찾겠다 .
   Future<Note?> getNoteById(int id) async {
     // Select * from note where id = 1;
     final List<Map<String, dynamic>> maps = await db.query(
