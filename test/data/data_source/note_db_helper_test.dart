@@ -20,6 +20,24 @@ void main(){
         timestamp: 1,
     ));
     // 잘 들어갔는지 확인 로직
-     expect((await noteDbHelper.getNotes()).length, 1); // 한개
+     expect((await noteDbHelper.getNotes()).length, 1); // 한개 메모있는지 확인 하는 로직
 
+    Note note = (await noteDbHelper.getNoteById(1))!; // 위에 있어서 Nullable !를 사용한다.
+    expect(note.id, 1); // 노트 아이디 1인지 확인
 
+    // 수정
+    //note.title ='change';// freezed 불변객체 여서 그냥  바꿀수없고 freezed 는 copywith를 통해서  변경할 수있다.
+    await noteDbHelper.update(note.copyWith(
+      title: 'change'
+    ));
+    // 변경된 제목 확인하기
+    note = (await noteDbHelper.getNoteById(1))!;
+    expect(note.title, 'change');
+
+    // 메모 삭제
+    await noteDbHelper.deleteNote(note);
+    expect((await noteDbHelper.getNotes()).length ,0);
+
+    db.close(); // db 닫기
+  });
+}
