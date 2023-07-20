@@ -19,5 +19,7 @@ void main(){
         color: 1,
         timestamp: 1,
     ));
+    // 잘 들어갔는지 확인 로직
+     expect((await noteDbHelper.getNotes()).length, 1); // 한개
 
-}
+
