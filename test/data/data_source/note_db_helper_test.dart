@@ -12,5 +12,12 @@ void main(){
       ('CREATE TABLE note(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT , color INTEGER , timestamp, INTEGER)');  // create 기능이 없어서 execute 로 작성한다.
 
     final noteDbHelper = NoteDbHelper(db); // 데이터 베이스 객체를 전달해서 생성한다.
+    // 메모 작성하기
+    await noteDbHelper.insertNote(Note(
+        title: 'test',
+        content: 'test',
+        color: 1,
+        timestamp: 1,
+    ));
 
 }
