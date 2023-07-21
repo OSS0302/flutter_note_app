@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:flutter_note_app/domain/repository/note_repository.dart';
 import 'package:flutter_note_app/presentation/note/notes_event.dart';
+import 'package:flutter_note_app/presentation/note/notes_state.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 class NotesViewModel with ChangeNotifier {
   // noteRepository 경우해서 일반적으로 MVVM 사용하듯이 하겠다.
  final NoteRepository repository;
 
+  NotesState _state = NotesState(notes: []);
+  NotesState get state =>_state;//  이제 state 에서 관리하니까  아래 주석 한 로직 은 지워도 된다.
 
 
-  // 모든 노트데이터 를 저장할 빈리스트 생성
-  List<Note> _notes = [];
-   UnmodifiableListView<Note> get notes=> UnmodifiableListView( _notes); // 상태가 여러개인 경우에는 상태를 하나로 모으는게 좋다.
+  /* // 모든 노트데이터 를 저장할 빈리스트 생성
+  // List<Note> _notes = [];
+  UnmodifiableListView<Note> get notes=> UnmodifiableListView( _notes); // 상태가 여러개인 경우에는 상태를 하나로 모으는게 좋다.*/
+
 
     Note? _recentlyDeleteNote ; // 최근에 삭제된 메모 데이터를 여기다가 넣을것이다.
 
@@ -34,7 +38,9 @@ class NotesViewModel with ChangeNotifier {
   // 모든 노트 데이터 가져오기
   Future<void> _loadNotes() async{ // 다른곳에 사용못하도록 _loadNotes 언더바를 사용했다.
     List<Note> notes = await repository.getNoes(); // 모든 노트 데이터 가져오기
-  _notes = notes;  // notes 교체하기
+  _state = state.copyWith(
+    notes:  notes,
+  );  // notes 교체하기
     notifyListeners(); // 이벤트 가 있다면 수행해라
   }
   // 삭제기능
