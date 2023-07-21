@@ -1,6 +1,6 @@
 
 import 'package:flutter_note_app/domain/model/note.dart';
-import 'package:flutter_note_app/domain/repository/note_repostiory.dart';
+import 'package:flutter_note_app/domain/repository/note_repository.dart';
 
 class DeleteNote{// 메모를 삭제하는 기능
    final NoteRepository repository;//

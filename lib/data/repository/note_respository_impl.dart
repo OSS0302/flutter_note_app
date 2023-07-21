@@ -1,6 +1,6 @@
 import 'package:flutter_note_app/data/data_source/note_db.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
-import 'package:flutter_note_app/domain/repository/note_repostiory.dart';
+import 'package:flutter_note_app/domain/repository/note_repository.dart';
 
 class NoteRepositoryImpl implements NoteRepository{
   NoteDbHelper db;// db 기능을 활용한 어떤 기능 하겠다.

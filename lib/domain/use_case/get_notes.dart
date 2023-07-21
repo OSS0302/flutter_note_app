@@ -1,5 +1,5 @@
 import 'package:flutter_note_app/domain/model/note.dart';
-import 'package:flutter_note_app/domain/repository/note_repostiory.dart';
+import 'package:flutter_note_app/domain/repository/note_repository.dart';
 
 // 모든 노트를 불러오는 기능
 class GetNotes {

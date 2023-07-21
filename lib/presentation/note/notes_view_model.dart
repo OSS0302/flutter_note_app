@@ -9,6 +9,7 @@ class NotesViewModel with ChangeNotifier {
  final NoteRepository repository;
 
 
+
   // 모든 노트데이터 를 저장할 빈리스트 생성
   List<Note> _notes = [];
    UnmodifiableListView<Note> get notes=> UnmodifiableListView( _notes); // 상태가 여러개인 경우에는 상태를 하나로 모으는게 좋다.

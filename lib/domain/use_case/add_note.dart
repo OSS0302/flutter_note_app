@@ -1,5 +1,5 @@
 import 'package:flutter_note_app/domain/model/note.dart';
-import 'package:flutter_note_app/domain/repository/note_repostiory.dart';
+import 'package:flutter_note_app/domain/repository/note_repository.dart';
 
 class AddNote{
   // 메모를 추가하는 기능
