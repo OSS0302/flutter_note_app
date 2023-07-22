@@ -9,7 +9,7 @@ part 'notes_state.g.dart';
 @freezed
 class NotesState with _$NotesState {
   factory NotesState({
-    @Default([]) List<Note> notes, // List<Note> notes =[] 를 줄 수없어서 @Default를 사용해서 넣었다.
+   required List<Note> notes, // List<Note> notes =[] 를 줄 수없어서 @Default를 사용해서 넣었다.
   }) = _NotesState;
 
   factory NotesState.fromJson(Map<String, dynamic> json) => _$NotesStateFromJson(json);

@@ -1,10 +1,8 @@
-import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:flutter_note_app/domain/repository/note_repository.dart';
 import 'package:flutter_note_app/presentation/note/notes_event.dart';
 import 'package:flutter_note_app/presentation/note/notes_state.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 class NotesViewModel with ChangeNotifier {
   // noteRepository 경우해서 일반적으로 MVVM 사용하듯이 하겠다.
  final NoteRepository repository;
@@ -22,7 +20,6 @@ class NotesViewModel with ChangeNotifier {
 
     NotesViewModel(this.repository); //NotesViewModel 이  noteRepository 받아서 활용 하겠다.
 
-
   // 첫번쨰 화면 할 수있는 기능을 지우기와 undo 모든 노트 가져오기 세가지  첫번째 화면에서 필요하다
   // view Model 메소드로 만들어 놓고
 
@@ -39,7 +36,7 @@ class NotesViewModel with ChangeNotifier {
   Future<void> _loadNotes() async{ // 다른곳에 사용못하도록 _loadNotes 언더바를 사용했다.
     List<Note> notes = await repository.getNoes(); // 모든 노트 데이터 가져오기
   _state = state.copyWith(
-    notes:  notes,
+    notes:  notes, // 노트 를 갱신 하겠다.
   );  // notes 교체하기
     notifyListeners(); // 이벤트 가 있다면 수행해라
   }
@@ -49,6 +46,7 @@ class NotesViewModel with ChangeNotifier {
     _recentlyDeleteNote = note;
     await _loadNotes(); // 다시 모든 노트 데이터를 가져오기
   }
+  // Undo 삭제 했을 때 되돌리기
   Future<void>_restoreNote() async{ // Undo 는 형태만 만들고 나중에 로직 만든후에 하겠다.
     if(_recentlyDeleteNote!=null){ // _recentlyDeleteNote null 이 아니라면
       await repository.insertNote(_recentlyDeleteNote!); //
