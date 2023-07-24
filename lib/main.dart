@@ -19,8 +19,19 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         scaffoldBackgroundColor: darkGary,
         canvasColor: darkGary,
+        floatingActionButtonTheme:
+          Theme.of(context).floatingActionButtonTheme.copyWith(
+            backgroundColor:Colors.white,  // 추가버튼를 흰색
+            foregroundColor: darkGary, // + 버튼 색 다크 그래이로 변경
+          ),
+          // appbar 테마 설정
+          appBarTheme:
+          Theme.of(context).appBarTheme.copyWith(
+            backgroundColor: darkGary,
+        ),
+
       ),
-      home: NotesScreen(),
+      home: const NotesScreen(),
     );
   }
 }
