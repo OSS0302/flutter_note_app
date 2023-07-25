@@ -44,8 +44,8 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
           bottom: 16,
           top: 48,
         ), //  5가지 컬러 패딩에서 간견주기
-          color: _color, //
-          duration: Duration(milliseconds: 500) ,
+          color: _color, // 해당하는 컬러 변경 해주면 선택 된 컬러로 변경된다.
+          duration: const Duration(milliseconds: 500) ,
           child: Column(
             children: [
               Row(
