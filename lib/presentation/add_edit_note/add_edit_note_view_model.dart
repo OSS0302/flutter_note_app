@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:flutter_note_app/domain/repository/note_repository.dart';
 import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_event.dart';
+import 'package:flutter_note_app/ui/colors.dart';
 
 class AddEditNoteViewModel with ChangeNotifier {
   NoteRepository repository;
 
-  int _color = Colors.blue.value;
+  int _color = roseBud.value;
 
   int get color => _color; // 밖에서 색깔를 변경해서 전달하면
 
