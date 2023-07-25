@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
+import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_screen.dart';
 import 'package:flutter_note_app/presentation/note/components/note_item.dart';
 import 'package:flutter_note_app/ui/colors.dart';
 
@@ -24,7 +25,11 @@ class NotesScreen extends StatelessWidget {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AddEditNoteScreen()), // 첫번째화면에서 두번째화면으로 이동
+          );
+        },
         child: const Icon(Icons.add),
       ),
       // container 안에 리스트를 통해서 모든 노트 가져오기
