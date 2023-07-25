@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_event.dart';
+import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_view_model.dart';
 import 'package:flutter_note_app/ui/colors.dart';
+import 'package:provider/provider.dart';
 
 class AddEditNoteScreen extends StatefulWidget {
   const AddEditNoteScreen({Key? key}) : super(key: key);
@@ -27,10 +30,10 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
     skyBlue,
     illusion,
   ];
-  Color _color = roseBud; // 테스트하기 위헤서 한가지 컬러 선택해서
 
   @override
   Widget build(BuildContext context) {
+    final  viewModel = context.watch<AddEditNoteViewModel>();
     return Scaffold(
       //버튼 누르면 저장하는 버튼 추가히기
       floatingActionButton: FloatingActionButton(
@@ -44,7 +47,7 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
           bottom: 16,
           top: 48,
         ), //  5가지 컬러 패딩에서 간견주기
-          color: _color, // 해당하는 컬러 변경 해주면 선택 된 컬러로 변경된다.
+          color: Color(viewModel.color), // 컬러를 뷰모델 컬러로 깜사서 연결해준다.
           duration: const Duration(milliseconds: 500) ,
           child: Column(
             children: [
@@ -54,13 +57,11 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
                     .map(
                       (color) => InkWell(
                           onTap: () {
-                            setState(() {
-                              _color = color; // 테스트하기 위해서  setState 에 위에 선언된 컬러 생성한다.
-                            });
+                           viewModel.onEvent(AddEditNoteEvent.changeColor(color.value)); // on Event를 통해서 이벤트를 전달하고 .value 는 타입이 서로 맞지 않아서 맞춘다.
                           },
                           child: _buildBackgroundColor(
                             color: color,
-                            selected: _color == color,
+                            selected: viewModel.color == color.value,// .value 는 타입이 서로 맞지 않아서 맞춘다.
                           ),
                       ),
                     )
