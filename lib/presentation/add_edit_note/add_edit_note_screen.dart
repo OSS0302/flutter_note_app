@@ -1,11 +1,15 @@
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_event.dart';
 import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_view_model.dart';
 import 'package:flutter_note_app/ui/colors.dart';
 import 'package:provider/provider.dart';
 
 class AddEditNoteScreen extends StatefulWidget {
-  const AddEditNoteScreen({Key? key}) : super(key: key);
+  final Note? note; // 노트를 일단 받고
+   const AddEditNoteScreen({Key? key ,this.note}) : super(key: key);
 
   @override
   State<AddEditNoteScreen> createState() => _AddEditNoteScreenState();
@@ -33,16 +37,25 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final  viewModel = context.watch<AddEditNoteViewModel>();
+    final viewModel = context.watch<AddEditNoteViewModel>();
     return Scaffold(
       //버튼 누르면 저장하는 버튼 추가히기
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if(_titleController.text.isEmpty || _contentController.text.isEmpty){
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar( content: Text('제목이나 내용이 비어있습니다.',)
-            ),
-          );
+          // 스낵바 :제목이나 내용이 비어있습니다.
+          if (_titleController.text.isEmpty ||
+              _contentController.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+              '제목이나 내용이 비어있습니다.',
+            )));
           }
+          // 이벤트 가 생겼을 경우
+          viewModel.onEvent(AddEditNoteEvent.saveNote(
+            widget.note ==  null ? null : widget.note!.id, // 노트가 null 이면 아이디 도 null이고 null 이 아니면 null이 아니다
+              _titleController.text, // 제목 컨트롤러 텍스트
+              _contentController.text // 내용 컨트롤러 텍스트
+          ));
         },
         child: const Icon(Icons.save),
       ),
@@ -53,60 +66,59 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
           bottom: 16,
           top: 48,
         ), //  5가지 컬러 패딩에서 간견주기
-          color: Color(viewModel.color), // 컬러를 뷰모델 컬러로 깜사서 연결해준다.
-          duration: const Duration(milliseconds: 500) ,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround, // 동일하게 간격두기
-                children: noteColor
-                    .map(
-                      (color) => InkWell(
-                          onTap: () {
-                           viewModel.onEvent(AddEditNoteEvent.changeColor(color.value)); // on Event를 통해서 이벤트를 전달하고 .value 는 타입이 서로 맞지 않아서 맞춘다.
-                          },
-                          child: _buildBackgroundColor(
-                            color: color,
-                            selected: viewModel.color == color.value,// .value 는 타입이 서로 맞지 않아서 맞춘다.
-                          ),
+        color: Color(viewModel.color), // 컬러를 뷰모델 컬러로 깜사서 연결해준다.
+        duration: const Duration(milliseconds: 500),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround, // 동일하게 간격두기
+              children: noteColor
+                  .map(
+                    (color) => InkWell(
+                      onTap: () {
+                        viewModel.onEvent(AddEditNoteEvent.changeColor(color
+                            .value)); // on Event를 통해서 이벤트를 전달하고 .value 는 타입이 서로 맞지 않아서 맞춘다.
+                      },
+                      child: _buildBackgroundColor(
+                        color: color,
+                        selected: viewModel.color ==
+                            color.value, // .value 는 타입이 서로 맞지 않아서 맞춘다.
                       ),
-                    )
-                    .toList(), // 리스트로 변환한  컬러 5가지 컬러 받겠다.
-              ),
-              // 제목
-              TextField(
-                controller: _titleController, // 제목 컨트롤러 연결
-                maxLines: 1,
-                style: Theme.of(context).textTheme.headline5!.copyWith(
-                      color: darkGary,
                     ),
-                decoration: const InputDecoration(
-                  hintText: '제목을 입력하세요', //
-                  border: InputBorder.none, // 밑줄 제거
-                ),
+                  )
+                  .toList(), // 리스트로 변환한  컬러 5가지 컬러 받겠다.
+            ),
+            // 제목
+            TextField(
+              controller: _titleController, // 제목 컨트롤러 연결
+              maxLines: 1,
+              style: Theme.of(context).textTheme.headline5!.copyWith(
+                    color: darkGary,
+                  ),
+              decoration: const InputDecoration(
+                hintText: '제목을 입력하세요', //
+                border: InputBorder.none, // 밑줄 제거
               ),
-              // 내용
-              TextField(
-                controller: _contentController, //내용 컨트롤러 연결
-                maxLines: null, // null 하면 아래로 내려간다.
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: darkGary,
-                    ),
-                decoration: const InputDecoration(
-                  hintText: '내용을 입력하세요',
-                  border: InputBorder.none, // 밑줄 제거
-                ),
+            ),
+            // 내용
+            TextField(
+              controller: _contentController, //내용 컨트롤러 연결
+              maxLines: null, // null 하면 아래로 내려간다.
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: darkGary,
+                  ),
+              decoration: const InputDecoration(
+                hintText: '내용을 입력하세요',
+                border: InputBorder.none, // 밑줄 제거
               ),
-            ],
-          ),
-
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildBackgroundColor({
-      required Color color,
-      required bool selected})  {
+  Widget _buildBackgroundColor({required Color color, required bool selected}) {
     // bool Selected 하면 원에 검은색 테두리  가 나온다.
     return Container(
         width: 48,
