@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:flutter_note_app/domain/repository/note_repository.dart';
 import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_event.dart';
+import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_ui_event.dart';
 import 'package:flutter_note_app/ui/colors.dart';
 
 class AddEditNoteViewModel with ChangeNotifier {
@@ -10,6 +13,9 @@ class AddEditNoteViewModel with ChangeNotifier {
   int _color = roseBud.value;
 
   int get color => _color; // 밖에서 색깔를 변경해서 전달하면
+
+   final _eventController = StreamController<AddEditNoteUiEvent >.broadcast();// 스트림 컨트롤러 생성하기
+   Stream<AddEditNoteUiEvent>  get eventStream =>_eventController.stream;//이벤트 컨트롤러.스트림을 전달한다.
 
   AddEditNoteViewModel(this.repository);
 
@@ -42,5 +48,6 @@ class AddEditNoteViewModel with ChangeNotifier {
         timestamp: DateTime.now().microsecondsSinceEpoch), // 현재시간을 밀리 초 데이터를 가져온다.
       );
     }
+    _eventController.add(AddEditNoteUiEvent.saveNote()); //saveNote 신호를 콘스트로 넣어준다.
   }
 }
