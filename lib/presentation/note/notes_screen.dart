@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_screen.dart';
 import 'package:flutter_note_app/presentation/note/components/note_item.dart';
+import 'package:flutter_note_app/presentation/note/notes_view_model.dart';
 import 'package:flutter_note_app/ui/colors.dart';
+import 'package:provider/provider.dart';
 
 class NotesScreen extends StatelessWidget {
   const NotesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<NotesViewModel>(); // 뷰모델를 받고나서
+    final state = viewModel.state; // state을 받는다.
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -26,8 +30,11 @@ class NotesScreen extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddEditNoteScreen()), // 첫번째화면에서 두번째화면으로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    const AddEditNoteScreen()), // 첫번째화면에서 두번째화면으로 이동
           );
         },
         child: const Icon(Icons.add),
@@ -36,25 +43,11 @@ class NotesScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
-          children: [
-            NoteItem(
-                note: Note(
-                    title: 'title 1',
-                    content: 'content 1',
-                    color: wisteria .value,
-                    timestamp: 1
-                )
-            ),
-            NoteItem(
-                note: Note(
-                    title: 'title 2',
-                    content: 'content 2',
-                    color: skyBlue .value,
-                    timestamp: 2
-                )
-            ),
-          ],
-        ),
+            children: state.notes
+                .map((note) => NoteItem(
+                      note: note,
+                    ))
+                .toList()),
       ),
     );
   }
