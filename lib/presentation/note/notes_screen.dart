@@ -50,7 +50,9 @@ class NotesScreen extends StatelessWidget {
             children: state.notes
                 .map((note) => NoteItem(
                       note: note,
-
+                      onDeleteTap: (){
+                        viewModel.onEvent(NotesEvent.deleteNote(note)); // 이벤트를 전달해서 삭제 한다.
+                      },
                     ))
                 .toList()),
       ),

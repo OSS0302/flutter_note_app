@@ -6,7 +6,7 @@ class NoteItem extends StatelessWidget {
 
   final Function? onDeleteTap; // 쓰레기 버튼을 눌렸을 떄 작동하기 위해서 생성
 
-  NoteItem({
+   NoteItem({
     Key? key,
     required this.note,
     this.onDeleteTap,
@@ -50,7 +50,7 @@ class NoteItem extends StatelessWidget {
             bottom: 8, // 밑에 8
             child: GestureDetector(
               onTap: () {
-                onDeleteTap; // call() 생략이 가능하다
+                onDeleteTap?.call();// call() 생략이 가능하다
               },
                 child: const Icon(Icons.delete),
             ), // 휴지통 아이콘
