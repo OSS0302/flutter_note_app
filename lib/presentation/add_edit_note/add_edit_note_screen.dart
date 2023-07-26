@@ -38,10 +38,10 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
       //버튼 누르면 저장하는 버튼 추가히기
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if(_titleController.text.isNotEmpty || _contentController.text.isNotEmpty){
-            const snackBar = SnackBar( content: Text('제목이나 내용이 비어있습니다.',));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+          if(_titleController.text.isEmpty || _contentController.text.isEmpty){
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar( content: Text('제목이나 내용이 비어있습니다.',)
+            ),
+          );
           }
         },
         child: const Icon(Icons.save),
