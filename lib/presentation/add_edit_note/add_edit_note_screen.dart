@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
 import 'package:flutter_note_app/presentation/add_edit_note/add_edit_note_event.dart';
@@ -16,10 +17,12 @@ class AddEditNoteScreen extends StatefulWidget {
 class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
   final _titleController = TextEditingController(); // 제목 컨트롤러
   final _contentController = TextEditingController(); // 내용컨트롤러
+   StreamSubscription? _streamSubscription;
 
   @override //메모리애서 헤제 해야한다.
   void dispose() {
     super.dispose();
+    _streamSubscription?.cancel(); // dipose가 있다면 헤제하는게 맞다.
     _titleController.dispose();
     _contentController.dispose();
   }
@@ -32,6 +35,20 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
     skyBlue,
     illusion,
   ];
+  @override
+  void initState() {
+    super.initState();
+    // 뷰모델 를 initState에서 바로 사용하지 못해서 딜레이 시간을주면된다.
+    Future.microtask(() {
+      final viewModel = context.read<AddEditNoteViewModel>(); // 뷰모델 가져오고
+      _streamSubscription =viewModel.eventStream.listen((event) {
+        event.when(saveNote: (){
+            //저장하면 화면을 뒤로 옮긴다.
+          Navigator.pop(context,true); // (context,true) 뒤에 true 를하면 pop를 동작하면서 saveNote로 동작했다라는 의미에서 true를 쓴다.
+        });
+      });// 이벤트
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
