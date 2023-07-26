@@ -18,7 +18,12 @@ class NotesViewModel with ChangeNotifier {
 
     Note? _recentlyDeleteNote ; // 최근에 삭제된 메모 데이터를 여기다가 넣을것이다.
 
-    NotesViewModel(this.repository); //NotesViewModel 이  noteRepository 받아서 활용 하겠다.
+    NotesViewModel(this.repository){//NotesViewModel 이  noteRepository 받아서 활용 하겠다.
+      _loadNotes(); // 뷰모델에서  _loadNotes 실행
+    }
+
+
+
 
   // 첫번쨰 화면 할 수있는 기능을 지우기와 undo 모든 노트 가져오기 세가지  첫번째 화면에서 필요하다
   // view Model 메소드로 만들어 놓고
