@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
-import 'package:flutter_note_app/domain/use_case/add_note_use_case.dart';
-import 'package:flutter_note_app/domain/use_case/delete_note_use_case.dart';
-import 'package:flutter_note_app/domain/use_case/get_notes_use_case.dart';
 import 'package:flutter_note_app/domain/use_case/use_cases.dart';
+import 'package:flutter_note_app/domain/util/note_order.dart';
+import 'package:flutter_note_app/domain/util/order_type.dart';
 import 'package:flutter_note_app/presentation/note/notes_event.dart';
 import 'package:flutter_note_app/presentation/note/notes_state.dart';
 
 class NotesViewModel with ChangeNotifier {
   final UseCases useCases;
 
-  NotesState _state = NotesState(notes: []);
+  NotesState _state = NotesState(notes: [], noteOrder:  const NoteOrder.date(OrderType.descending()));
 
   NotesState get state => _state; //  이제 state 에서 관리하니까  아래 주석 한 로직 은 지워도 된다.
 
@@ -37,7 +36,7 @@ class NotesViewModel with ChangeNotifier {
   // 모든 노트 데이터 가져오기
   Future<void> _loadNotes() async {
     // 다른곳에 사용못하도록 _loadNotes 언더바를 사용했다.
-    List<Note> notes = await useCases.getNotesUseCase(); // 모든 노트 데이터 가져오기 getNotes뒤에 call 함수는 굳이 안써도 된다.
+    List<Note> notes = await useCases.getNotesUseCase(state.noteOrder); // 모든 노트 데이터 가져오기 getNotes뒤에 call 함수는 굳이 안써도 된다.
     _state = state.copyWith(
       notes: notes, // 노트 를 갱신 하겠다.
     ); // notes 교체하기
