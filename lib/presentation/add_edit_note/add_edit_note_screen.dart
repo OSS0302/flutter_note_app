@@ -38,6 +38,13 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
   @override
   void initState() {
     super.initState();
+    //   수정했을때 노트에 데이터
+      if(widget.note !=null ){
+        _titleController.text =widget.note!.title; // !는 null 아님을 보증한다.
+        _contentController.text = widget.note!.content;//!는 null 아님을 보증한다.
+
+      }
+
     // 뷰모델 를 initState에서 바로 사용하지 못해서 딜레이 시간을주면된다.
     Future.microtask(() {
       final viewModel = context.read<AddEditNoteViewModel>(); // 뷰모델 가져오고
@@ -45,7 +52,11 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
         event.when(saveNote: (){
             //저장하면 화면을 뒤로 옮긴다.
           Navigator.pop(context,true); // (context,true) 뒤에 true 를하면 pop를 동작하면서 saveNote로 동작했다라는 의미에서 true를 쓴다.
-        });
+        }, showSnackBar: (String message) {
+          final snackBar = SnackBar(content: Text(message));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        );
       });// 이벤트
     });
   }
@@ -57,14 +68,6 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
       //버튼 누르면 저장하는 버튼 추가히기
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // 스낵바 :제목이나 내용이 비어있습니다.
-          if (_titleController.text.isEmpty ||
-              _contentController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text(
-              '제목이나 내용이 비어있습니다.',
-            )));
-          }
           // 이벤트 가 생겼을 경우
           viewModel.onEvent(AddEditNoteEvent.saveNote(
             widget.note ==  null ? null : widget.note!.id, // 노트가 null 이면 아이디 도 null이고 null 이 아니면 null이 아니다
