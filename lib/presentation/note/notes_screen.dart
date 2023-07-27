@@ -31,14 +31,15 @@ class NotesScreen extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          bool? isSaved = await Navigator
-              .push( //null 이면 사용자가 뒤로가기 한거고 true 값이 들어오면 saveNote 동작해서 되돌아온거다.
+          bool? isSaved = await Navigator.push(
+            //null 이면 사용자가 뒤로가기 한거고 true 값이 들어오면 saveNote 동작해서 되돌아온거다.
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                const AddEditNoteScreen()), // 첫번째화면에서 두번째화면으로 이동
+                    const AddEditNoteScreen()), // 첫번째화면에서 두번째화면으로 이동
           );
-          if (isSaved != null && isSaved) { // isSaved 널이 아니라면 새로고침 해라
+          if (isSaved != null && isSaved) {
+            // isSaved 널이 아니라면 새로고침 해라
             viewModel.onEvent(const NotesEvent.loadNotes()); //loadNotes: 새로고침
           }
         },
@@ -49,25 +50,42 @@ class NotesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
             children: state.notes
-                .map((note) =>
-                NoteItem(
-                  note: note,
-                  onDeleteTap: () {
-                    viewModel.onEvent(
-                        NotesEvent.deleteNote(note)); // 이벤트를 전달해서 삭제 한다.
-                    //undo
-                    final snackBar = SnackBar(content: Text('노트가 삭제가되었습니다.'),
-                      action: SnackBarAction(
-                        label: '취소',
-                        onPressed: () {
-                          viewModel.onEvent(const NotesEvent.restoreNote());
-                        },
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
-                ),
-            )
+                .map(
+                  (note) => GestureDetector(
+                    onTap: () async{
+                      bool? isSaved = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  AddEditNoteScreen(
+                            note: note,
+                          ),
+                        ),
+                      );
+                      if (isSaved != null && isSaved) {
+                        // isSaved 널이 아니라면 새로고침 해라
+                        viewModel.onEvent(const NotesEvent.loadNotes()); //loadNotes: 새로고침
+                      }
+                    },
+                    child: NoteItem(
+                      note: note,
+                      onDeleteTap: () {
+                        viewModel.onEvent(
+                            NotesEvent.deleteNote(note)); // 이벤트를 전달해서 삭제 한다.
+                        //undo
+                        final snackBar = SnackBar(
+                          content: Text('노트가 삭제가되었습니다.'),
+                          action: SnackBarAction(
+                            label: '취소',
+                            onPressed: () {
+                              viewModel.onEvent(const NotesEvent.restoreNote());
+                            },
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      },
+                    ),
+                  ),
+                )
                 .toList()),
       ),
     );
