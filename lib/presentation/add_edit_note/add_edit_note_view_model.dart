@@ -31,6 +31,13 @@ class AddEditNoteViewModel with ChangeNotifier {
 
   // 아이디 제목 내용 저장하는 기능
   Future<void> _saveNote(int? id, String title, String content) async {
+    // 스낵바 처리를 뷰모델에서 하겠다.
+    if(title.isEmpty || content.isEmpty){
+      _eventController.add(const AddEditNoteUiEvent.showSnackBar('제목이나 내용이 비어있습니다.'));
+      return;
+    }
+
+
     if (id == null) {
       await repository.insertNote(Note( // 작성할 때 저장
           title: title, // 제목
