@@ -58,7 +58,7 @@ class OrderSection extends StatelessWidget {
             const Text('색상'),
           ],
         ),
-        Container(
+        SizedBox(
           height: 18,
           child: Row(
             children: [
