@@ -86,7 +86,7 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
         ), //  5가지 컬러 패딩에서 간견주기
         color: Color(viewModel.color), // 컬러를 뷰모델 컬러로 깜사서 연결해준다.
         duration: const Duration(milliseconds: 500),
-        child: Column(
+        child: ListView(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround, // 동일하게 간격두기
