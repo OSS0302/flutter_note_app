@@ -9,14 +9,19 @@ import 'package:flutter_note_app/presentation/note/notes_state.dart';
 class NotesViewModel with ChangeNotifier {
   final UseCases useCases;
 
-  NotesState _state = NotesState(notes: [], noteOrder:  const NoteOrder.date(OrderType.descending()));
+  NotesState _state = NotesState(
+    notes: [],
+    noteOrder: const NoteOrder.date(OrderType.descending()),
+    isOrderSectionVisible: false, // 처음에 숨겨도 놓고 싶으면 false 둔다.
+  );
 
   NotesState get state => _state; //  이제 state 에서 관리하니까  아래 주석 한 로직 은 지워도 된다.
 
   Note? _recentlyDeleteNote; // 최근에 삭제된 메모 데이터를 여기다가 넣을것이다.
 
   NotesViewModel(
-      this.useCases,) {
+    this.useCases,
+  ) {
     //NotesViewModel 이  noteRepository 받아서 활용 하겠다.
     _loadNotes(); // 뷰모델에서  _loadNotes 실행
   }
@@ -30,13 +35,25 @@ class NotesViewModel with ChangeNotifier {
       loadNotes: _loadNotes, // _loadNotes 연결하기
       deleteNote: _deleteNote, // deleteNote 연결하기
       restoreNote: _restoreNote, // Undo 연결하기
-    ); //세가지 기능
+      changeOrder: (NoteOrder noteOrder) {
+        _state = state.copyWith(
+          noteOrder: noteOrder, // 새로운 노트 오더 바꿔서 state 전달하면된다.
+        );
+        _loadNotes(); // 새로고침 하면된다.
+      }, toggleOrderSection: () {
+        _state = state.copyWith( // 기존에 있던 state을 isOrderSectionVisible 값의 반대값으로 바꿔준다.
+            isOrderSectionVisible: !state.isOrderSectionVisible,
+        );
+        notifyListeners(); // 이벤트 가있으면 알려줘가
+    },
+    ); //4가지 기능
   }
 
   // 모든 노트 데이터 가져오기
   Future<void> _loadNotes() async {
     // 다른곳에 사용못하도록 _loadNotes 언더바를 사용했다.
-    List<Note> notes = await useCases.getNotesUseCase(state.noteOrder); // 모든 노트 데이터 가져오기 getNotes뒤에 call 함수는 굳이 안써도 된다.
+    List<Note> notes = await useCases.getNotesUseCase(
+        state.noteOrder); // 모든 노트 데이터 가져오기 getNotes뒤에 call 함수는 굳이 안써도 된다.
     _state = state.copyWith(
       notes: notes, // 노트 를 갱신 하겠다.
     ); // notes 교체하기
@@ -47,15 +64,14 @@ class NotesViewModel with ChangeNotifier {
   Future<void> _deleteNote(Note note) async {
     await useCases.deleteNoteUseCase(note); // 노트를 삭제하기
     _recentlyDeleteNote = note;
-    await _loadNotes
-    (
-    ); // 다시 모든 노트 데이터를 가져오기
+    await _loadNotes(); // 다시 모든 노트 데이터를 가져오기
   }
 
   // Undo 삭제 했을 때 되돌리기
   Future<void> _restoreNote() async {
     // Undo 는 형태만 만들고 나중에 로직 만든후에 하겠다.
-    if (_recentlyDeleteNote != null) { // _recentlyDeleteNote null 이 아니라면
+    if (_recentlyDeleteNote != null) {
+      // _recentlyDeleteNote null 이 아니라면
       await useCases.addNoteUseCase(_recentlyDeleteNote!); //
       _recentlyDeleteNote = null; // _recentlyDeleteNote를 다시 비워 준다.
 
