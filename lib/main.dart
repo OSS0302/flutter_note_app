@@ -20,13 +20,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        unselectedWidgetColor: Colors.white, // 라디오 버튼 흰색으로 보이게 하기 (누르기전)
         primaryColor: Colors.white,
         scaffoldBackgroundColor: darkGary,
         canvasColor: darkGary,
@@ -39,6 +39,10 @@ class MyApp extends StatelessWidget {
         appBarTheme: Theme.of(context).appBarTheme.copyWith(
               backgroundColor: darkGary,
             ),
+        textTheme: Theme.of(context).textTheme.apply(// 속성를 정의할 수있는 apply
+          // textTheme 안에 있는 세부적인 속성를  정의 할수있다.
+          bodyColor: Colors.white // 타이틀 흰색
+        ),
       ),
       home: const NotesScreen(),
     );
