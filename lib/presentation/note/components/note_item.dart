@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_note_app/domain/model/note.dart';
+import 'package:flutter_note_app/ui/colors.dart';
 
 class NoteItem extends StatelessWidget {
   final Note note; //노트를 받아서 생성자를 통해서
@@ -33,14 +34,18 @@ class NoteItem extends StatelessWidget {
                   note.title,
                   maxLines: 1, // 제목 한줄 보여주기
                   overflow: TextOverflow.ellipsis, // 길면 뒤에... 으로 나온다.
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.headline6!.apply(//headline6 null 아님을 보증하고
+                    color: darkGary // 다크그래이 으로 변경
+                  ),
                 ), // 제목
                 const SizedBox(height: 8), // 제목 과 내용 SizedBox 로 간격주기
                 Text(
                   note.content,
                   maxLines: 10,
                   overflow: TextOverflow.ellipsis, // 길면 뒤에... 으로 나온다.
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyText2!.apply(//bodyText2 null 아님을 보증하고
+                    color: darkGary // 다크 그래이
+                  ),
                 ), // 내용
               ],
             ),
