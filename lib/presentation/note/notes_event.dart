@@ -1,4 +1,5 @@
 import 'package:flutter_note_app/domain/model/note.dart';
+import 'package:flutter_note_app/domain/util/note_order.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'notes_event.freezed.dart';
@@ -8,5 +9,9 @@ abstract class NotesEvent<T> with _$NotesEvent{
   const factory NotesEvent.loadNotes() = LoadNotes; // 노트를 불러오는 기능  나중에 하나의 타입으로 만들것이다.
   const factory NotesEvent.deleteNote(Note note) = DeleteNote; // 노트를 삭제 하는 기능
   const factory NotesEvent.restoreNote() = RestroeNote; // 노트를 삭제 취소 기능
+  const factory NotesEvent.changeOrder(NoteOrder noteOrder) = ChangeOrder; // 정렬 하는기능
+  const factory NotesEvent.toggleOrderSection( ) = ToggleOrderSection; // 정렬 토글 바 생성
+
+
 
 }
